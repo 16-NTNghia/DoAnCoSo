@@ -106,8 +106,7 @@ namespace DoAnCoSo.Migrations
                         name: "FK_TaiKhoans_ChucVus_ID_ChucVu",
                         column: x => x.ID_ChucVu,
                         principalTable: "ChucVus",
-                        principalColumn: "ID_ChucVu",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ID_ChucVu");
                 });
 
             migrationBuilder.CreateTable(
@@ -124,14 +123,12 @@ namespace DoAnCoSo.Migrations
                         name: "FK_phanQuyens_ChucVus_Id_ChucVu",
                         column: x => x.Id_ChucVu,
                         principalTable: "ChucVus",
-                        principalColumn: "ID_ChucVu",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ID_ChucVu");
                     table.ForeignKey(
                         name: "FK_phanQuyens_quyens_Id_Quyen",
                         column: x => x.Id_Quyen,
                         principalTable: "quyens",
-                        principalColumn: "ID_Quyen",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ID_Quyen");
                 });
 
             migrationBuilder.CreateTable(
@@ -157,26 +154,22 @@ namespace DoAnCoSo.Migrations
                         name: "FK_xes_TaiKhoans_Email",
                         column: x => x.Email,
                         principalTable: "TaiKhoans",
-                        principalColumn: "Email",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Email");
                     table.ForeignKey(
                         name: "FK_xes_diaDiems_ID_DiaDiem",
                         column: x => x.ID_DiaDiem,
                         principalTable: "diaDiems",
-                        principalColumn: "ID_DiaDiem",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ID_DiaDiem");
                     table.ForeignKey(
                         name: "FK_xes_hangXes_ID_HangXe",
                         column: x => x.ID_HangXe,
                         principalTable: "hangXes",
-                        principalColumn: "ID_HangXe",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ID_HangXe");
                     table.ForeignKey(
                         name: "FK_xes_loaiXes_ID_Loai",
                         column: x => x.ID_Loai,
                         principalTable: "loaiXes",
-                        principalColumn: "ID_LoaiXe",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ID_LoaiXe");
                 });
 
             migrationBuilder.CreateTable(
@@ -198,8 +191,7 @@ namespace DoAnCoSo.Migrations
                         name: "FK_datLichThueXes_TaiKhoans_Email",
                         column: x => x.Email,
                         principalTable: "TaiKhoans",
-                        principalColumn: "Email",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Email");
                     table.ForeignKey(
                         name: "FK_datLichThueXes_xes_BienSoXe",
                         column: x => x.BienSoXe,
@@ -224,8 +216,7 @@ namespace DoAnCoSo.Migrations
                         name: "FK_hinhAnhXes_xes_BienSoXe",
                         column: x => x.BienSoXe,
                         principalTable: "xes",
-                        principalColumn: "BienSoXe",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "BienSoXe");
                 });
 
             migrationBuilder.CreateTable(
@@ -245,8 +236,7 @@ namespace DoAnCoSo.Migrations
                         name: "FK_hoaDons_datLichThueXes_ID_DatLich_Email_BienSoXe",
                         columns: x => new { x.ID_DatLich, x.Email, x.BienSoXe },
                         principalTable: "datLichThueXes",
-                        principalColumns: new[] { "ID_DatLich", "Email", "BienSoXe" },
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumns: new[] { "ID_DatLich", "Email", "BienSoXe" });
                 });
 
             migrationBuilder.CreateIndex(
