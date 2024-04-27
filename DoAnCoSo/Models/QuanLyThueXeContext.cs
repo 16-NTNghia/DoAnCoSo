@@ -32,6 +32,9 @@ namespace DoAnCoSo.Models
 					.WithMany(c => c.TaiKhoans)
 					.HasForeignKey(t => t.ID_ChucVu);
 
+				entity.Property(t => t.MatKhau)
+					.IsUnicode(false);
+
 				entity.HasIndex(t => t.SoDienThoai)
 					.IsUnique();
 

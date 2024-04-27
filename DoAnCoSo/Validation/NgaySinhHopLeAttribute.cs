@@ -9,7 +9,7 @@ namespace DoAnCoSo.Validation
 			DateTime ngaySinh = (DateTime)value;
 			if (DateTime.Today.Year - ngaySinh.Year < 18)
 			{
-				return new ValidationResult("Ngày sinh phải bé hơn hiện tại 18 năm.");
+				return new ValidationResult("Phải hơn 18 tuổi.");
 			}
 			return ValidationResult.Success;
 		}

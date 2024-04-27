@@ -1,0 +1,253 @@
+﻿@{
+	ViewData["Title"] = "Register";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model DoAnCoSo.ViewModels.UserViewModel
+<div class="card" >
+	<div class="card-header" style="background-color: blue; color: white"><i class="bi bi-plus-square-fill"></i> Đăng ký thành viên</div>
+	<div class="card-body">
+		@if (TempData["ErrorMessage"] != null)
+		{
+			<div id="alertMessage" class="alert alert-danger" role="alert">
+				@TempData["ErrorMessage"]
+			</div>
+		}
+		@if (TempData["SuccessMessage"] != null)
+		{
+			<div id="alertMessage" class="alert alert-success">
+				@TempData["SuccessMessage"]
+			</div>
+		}
+		<form class="form form-horizontal" asp-action="Register" asp-controller="User" method="POST">
+			<div class="form-group mb-3">
+				<div class="form-floating">
+					<input class="form-control" asp-for="TaiKhoan.Email"
+						   placeholder="Nhập Email đăng ký" required />
+					<label asp-for="TaiKhoan.Email">Email</label>
+					<span asp-validation-for="TaiKhoan.Email" class="text-danger"></span>
+				</div>
+			</div>
+
+			<div class="form-group row mb-3">
+				<label asp-for="TaiKhoan.MatKhau" class="col-sm-3">Mật khẩu: </label>
+				<div class="col-sm-9">
+					<div class="input-group input-group-lg">
+						<input type="password" class="form-control" asp-for="TaiKhoan.MatKhau" id="password"
+							   placeholder="Nhập Mật khẩu" required />
+						<label for="showPassword" class="input-group-text">
+							<span>
+								<i id="togglePassword" class="bi bi-eye"></i>
+							</span>
+						</label>
+					</div>
+					<p id="passwordUnicode" style="color: red; display: none;">Mật khẩu không được chứa ký tự Unicode.</p>
+					<p id="passwordError">Mật khẩu có ít nhất 1 ký tự hoa, 1 ký tự thường, 1 ký tự đặc biệt, 1 số, và ít nhất 8 ký tự.</p>
+					<span asp-validation-for="TaiKhoan.MatKhau" class="text-danger"></span>
+				</div>
+			</div>
+
+			<div class="form-group row mb-3">
+				<label for="confirmPassword" class="col-sm-3">Nhập lại mật khẩu: </label>
+				<div class="col-sm-9">
+					<div class="input-group input-group-lg">
+						<input type="password" class="form-control" id="confirmPassword"
+							   placeholder="Nhập lại mật khẩu" required
+							   oninput="checkPasswordMatch(this);" />
+						<label for="showConfirmPassword" class="input-group-text">
+							<span><i id="toggleconfirmPassword" class="bi bi-eye"></i></span>
+						</label>
+
+						<div id="passwordMatchMessage"></div>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group mb-3">
+				<div class="form-floating">
+					<input class="form-control" asp-for="TaiKhoan.Ho"
+						   placeholder="Nhập họ" required />
+					<label asp-for="TaiKhoan.Ho">Họ</label>
+					<span asp-validation-for="TaiKhoan.Ho" class="text-danger"></span>
+				</div>
+			</div>
+
+			<div class="form-group mb-3">
+				<div class="form-floating">
+					<input class="form-control" asp-for="TaiKhoan.Ten"
+						   placeholder="Nhập tên" required />
+					<label asp-for="TaiKhoan.Ten">Tên</label>
+					<span asp-validation-for="TaiKhoan.Ten" class="text-danger"></span>
+				</div>
+			</div>
+
+			<div class="form-group mb-3">
+				<div class="form-floating">
+					<input type="date" class="form-control" asp-for="TaiKhoan.NgaySinh"/>
+					<label asp-for="TaiKhoan.NgaySinh">Ngày sinh</label>
+					<span asp-validation-for="TaiKhoan.NgaySinh" class="text-danger"></span>
+				</div>
+			</div>
+
+			<div class="form-group mb-3">
+				<div class="form-floating">
+					<input class="form-control" asp-for="TaiKhoan.CanCuocCongDan"
+						   placeholder="Nhập căn cước công dân" required />
+					<label asp-for="TaiKhoan.CanCuocCongDan">Căn cước công dân</label>
+					<span asp-validation-for="TaiKhoan.CanCuocCongDan" class="text-danger"></span>
+				</div>
+			</div>
+
+			<div class="form-group mb-3">
+				<div class="form-floating">
+					<input type="date" class="form-control" asp-for="TaiKhoan.NgayCap" asp-format="{0:dd-MM-yyyy}"/>
+					<label asp-for="TaiKhoan.NgayCap">Ngày cấp</label>
+					<span asp-validation-for="TaiKhoan.NgayCap" class="text-danger"></span>
+				</div>
+			</div>
+
+			<div class="form-group mb-3">
+				<div class="form-floating">
+					<input class="form-control" asp-for="TaiKhoan.GiayPhepLaiXe"
+						   placeholder="Nhập căn cước công dân" required />
+					<label asp-for="TaiKhoan.GiayPhepLaiXe">Giấy phép lái xe</label>
+					<span asp-validation-for="TaiKhoan.GiayPhepLaiXe" class="text-danger"></span>
+				</div>
+			</div>
+
+			<div class="form-group mb-3">
+				<div class="form-floating">
+					<input class="form-control" asp-for="TaiKhoan.SoDienThoai"
+						   placeholder="Nhập số điện thoại" required />
+					<label asp-for="TaiKhoan.SoDienThoai">Số điện thoại</label>
+					<span asp-validation-for="TaiKhoan.SoDienThoai" class="text-danger"></span>
+				</div>
+			</div>
+
+			<div class="form-group mb-3">
+					<div class="row">
+						<label class="col-md-2" asp-for="TaiKhoan.GioiTinh">Giới tính</label>
+						<div class="form-check col-md-2">
+							<input class="form-check-input" type="radio" asp-for="TaiKhoan.GioiTinh" value="true" id="namRadio">
+							<label class="form-check-label" for="namRadio">Nam</label>
+						</div>
+						<div class="form-check col-md-2">
+							<input class="form-check-input" type="radio" asp-for="TaiKhoan.GioiTinh" value="false" id="nuRadio">
+							<label class="form-check-label" for="nuRadio">Nữ</label>
+						</div>
+					</div>
+					<span asp-validation-for="TaiKhoan.GioiTinh" class="text-danger"></span>
+			</div>
+
+			<div class="form-group">
+				<div class="col-md-offset-3" style="text-align: center">
+					<button type="submit" class="btn btn-info">Đăng ký</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+@section scripts {
+	<script>
+		function checkPasswordMatch(input) {
+			var passwordInput = document.getElementById('password');
+			var confirmPasswordInput = input;
+			if (passwordInput.value !== confirmPasswordInput.value) {
+				confirmPasswordInput.setCustomValidity('Mật khẩu không khớp');
+			} else {
+				confirmPasswordInput.setCustomValidity('');
+			}
+		}
+	</script>
+	<script>
+		var passwordInput = document.getElementById('password');
+		var togglePassword = document.getElementById('togglePassword');
+		var isMouseDown = false;
+
+		togglePassword.addEventListener('mousedown', function () {
+			passwordInput.type = 'text';
+			isMouseDown = true;
+		});
+
+		togglePassword.addEventListener('mouseup', function () {
+			passwordInput.type = 'password';
+			isMouseDown = false;
+		});
+
+		// Xử lý khi người dùng rời chuột ra ngoài icon mắt
+		togglePassword.addEventListener('mouseleave', function () {
+			if (isMouseDown) {
+				passwordInput.type = 'password';
+				isMouseDown = false;
+			}
+		});
+	</script>
+	<script>
+		var confirmPasswordInput = document.getElementById('confirmPassword');
+		var toggleconfirmPassword = document.getElementById('toggleconfirmPassword');
+		var isMouseDown = false;
+
+		toggleconfirmPassword.addEventListener('mousedown', function () {
+			confirmPasswordInput.type = 'text';
+			isMouseDown = true;
+		});
+
+		toggleconfirmPassword.addEventListener('mouseup', function () {
+			confirmPasswordInput.type = 'password';
+			isMouseDown = false;
+		});
+
+		// Xử lý khi người dùng rời chuột ra ngoài icon mắt
+		toggleconfirmPassword.addEventListener('mouseleave', function () {
+			if (isMouseDown) {
+				confirmPasswordInput.type = 'password';
+				isMouseDown = false;
+			}
+		});
+	</script>
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+			// Lấy phần tử thông báo
+			var alertElement = document.getElementById('alertMessage');
+
+			// Ẩn thông báo tự động sau 5 giây
+			setTimeout(function () {
+				alertElement.style.display = 'none'; // Ẩn thông báo
+			}, 5000);
+		});
+	</script>
+	<script>
+		// Lấy tham chiếu đến thẻ <p> theo id
+		var passwordError = document.getElementById('passwordError');
+
+		// Lắng nghe sự kiện khi người dùng nhập vào ô input mật khẩu
+		document.getElementById('password').addEventListener('input', function () {
+			// Kiểm tra nếu giá trị của ô input mật khẩu không rỗng
+			if (this.value.trim() !== '') {
+				// Ẩn thẻ <p> bằng cách đặt thuộc tính display: none
+				passwordError.style.display = 'none';
+			} else {
+				// Hiển thị thẻ <p> nếu ô input mật khẩu rỗng
+				passwordError.style.display = 'block';
+			}
+		});
+	</script>
+	<script>
+		// Lắng nghe sự kiện khi người dùng nhập vào ô input mật khẩu
+		document.getElementById('password').addEventListener('input', function () {
+			// Lấy giá trị mật khẩu
+			var password = this.value;
+
+			// Kiểm tra xem mật khẩu có chứa ký tự Unicode không
+			var hasUnicode = /[^\x00-\x7F]/.test(password);
+
+			// Nếu mật khẩu chứa ký tự Unicode, hiển thị thông báo lỗi
+			if (hasUnicode) {
+				document.getElementById('passwordUnicode').style.display = 'block';
+			} else {
+				document.getElementById('passwordUnicode').style.display = 'none';
+			}
+		});
+	</script>
+	<partial name="_ValidationScriptsPartial" />
+}
+

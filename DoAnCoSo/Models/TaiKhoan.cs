@@ -14,6 +14,7 @@ namespace DoAnCoSo.Models
 		[Required(ErrorMessage = "Mật khẩu là trường bắt buộc.")]
 		[RegularExpression(@"^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$",
 			ErrorMessage = "Mật khẩu phải có ít nhất 1 ký tự hoa, 1 ký tự thường, 1 ký tự đặc biệt, 1 số, và ít nhất 8 ký tự.")]
+		[KhongChuaUnicode]
 		public string MatKhau { get; set;}
 		[Required(ErrorMessage = "Họ là trường bắt buộc.")]
 		[RegularExpression(@"^[^\d]+$", ErrorMessage = "Họ chỉ chứa ký tự, không có số.")]
@@ -31,18 +32,18 @@ namespace DoAnCoSo.Models
 		[Required(ErrorMessage = "Số điện thoại là trường bắt buộc.")]
 		[RegularExpression(@"^\d{10,11}$", ErrorMessage = "Số điện thoại phải có từ 10 đến 11 ký tự số.")]
 		public string SoDienThoai { get; set; }
-        public bool GioiTinh { get; set; }
+		[Required(ErrorMessage = "Giới tính là trường bắt buộc.")]
+		public bool GioiTinh { get; set; }
         public string? AnhDaiDien {  get; set; }
 		[Required(ErrorMessage = "Giấy phép lái xe là bắt buộc.")]
 		[RegularExpression(@"^\d{12}$", ErrorMessage = "Giấy phép lái xe phải có 12 chữ số.")]
 		public string GiayPhepLaiXe { get; set; }
 		[Required(ErrorMessage = "Ẩn là bắt buộc.")]
 		public int Hide { get; set; }
-		[Required(ErrorMessage = "Chức vụ là bắt buộc.")]
 		public int ID_ChucVu { get; set; }
-		public ChucVu ChucVu { get; set; }
+		public virtual ChucVu? ChucVu { get; set; } = null!;
 
-		public ICollection<Xe> xes { get; set; }
-		public ICollection<DatLichThueXe> datLichThueXes { get; set; }
+		public virtual ICollection<Xe>? xes { get; set; } = new List<Xe>();
+		public virtual ICollection<DatLichThueXe>? datLichThueXes { get; set; } = new List<DatLichThueXe>();
 	}					 
 }

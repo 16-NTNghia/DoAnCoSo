@@ -10,9 +10,14 @@ namespace DoAnCoSo.Validation
 			DateTime ngayCap = (DateTime)value;
 			TaiKhoan taiKhoan = (TaiKhoan)validationContext.ObjectInstance;
 
-			if (ngayCap <= taiKhoan.NgaySinh.AddYears(14))
+			if (ngayCap.Year - taiKhoan.NgaySinh.Year < 14)
 			{
-				return new ValidationResult("Ngày cấp căn cước phải lớn hơn ngày sinh 14 năm.");
+				return new ValidationResult("Ngày cấp căn cước không hợp lệ.");
+			}
+
+			if (ngayCap > DateTime.Now)
+			{
+				return new ValidationResult("Ngày cấp căn cước không hợp lệ.");
 			}
 			return ValidationResult.Success;
 		}

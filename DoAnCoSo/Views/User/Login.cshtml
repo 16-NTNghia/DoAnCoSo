@@ -1,0 +1,123 @@
+﻿@{
+	ViewData["Title"] = "Login";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model DoAnCoSo.ViewModels.UserViewModel
+<div class="card" style="margin-bottom: 500px">
+	<div class="card-header" style="background-color: red; color: white"><i class="bi bi-box-arrow-in-right"></i> Đăng nhập</div>
+	<div class="card-body">
+		@if (TempData["ErrorMessage"] != null)
+		{
+			<div id="alertMessage" class="alert alert-danger" role="alert">@TempData["ErrorMessage"]</div>
+		}
+		@if (TempData["SuccessMessage"] != null)
+		{
+			<div id="alertMessage" class="alert alert-success">@TempData["SuccessMessage"]</div>
+		}
+		<form class="form form-horizontal" asp-action="Login" asp-controller="User" method="POST">
+			<div class="form-group mb-3">
+				<div class="form-floating">
+					<input class="form-control" asp-for="TaiKhoan.Email"
+						   placeholder="Nhập Email đăng ký" required />
+					<label asp-for="TaiKhoan.Email">Email</label>
+					<span asp-validation-for="TaiKhoan.Email" class="text-danger"></span>
+				</div>
+			</div>
+
+			<div class="form-group row mb-3">
+				<label asp-for="TaiKhoan.MatKhau" class="col-sm-3">Mật khẩu: </label>
+				<div class="col-sm-9">
+					<div class="input-group input-group-lg">
+						<input type="password" class="form-control" asp-for="TaiKhoan.MatKhau" id="password"
+							   placeholder="Nhập Mật khẩu " required />
+						<label for="showPassword" class="input-group-text">
+							<span>
+								<i id="togglePassword" class="bi bi-eye"></i>
+							</span>
+						</label>
+					</div>
+					<p id="passwordUnicode" style="color: red; display: none;">Mật khẩu không chứa ký tự Unicode.</p>
+					<p id="passwordError">Mật khẩu có ít nhất 1 ký tự hoa, 1 ký tự thường, 1 ký tự đặc biệt, 1 số, và ít nhất 8 ký tự.</p>
+					<span asp-validation-for="TaiKhoan.MatKhau" class="text-danger"></span>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="col-md-offset-3" style="text-align: center; justify-content: center">
+					<button type="submit" class="btn btn-danger">Đăng nhập</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+@section scripts {
+	<script>
+		var passwordInput = document.getElementById('password');
+		var togglePassword = document.getElementById('togglePassword');
+		var isMouseDown = false;
+
+		togglePassword.addEventListener('mousedown', function () {
+			passwordInput.type = 'text';
+			isMouseDown = true;
+		});
+
+		togglePassword.addEventListener('mouseup', function () {
+			passwordInput.type = 'password';
+			isMouseDown = false;
+		});
+
+		// Xử lý khi người dùng rời chuột ra ngoài icon mắt
+		togglePassword.addEventListener('mouseleave', function () {
+			if (isMouseDown) {
+				passwordInput.type = 'password';
+				isMouseDown = false;
+			}
+		});
+	</script>
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+			// Lấy phần tử thông báo
+			var alertElement = document.getElementById('alertMessage');
+
+			// Ẩn thông báo tự động sau 5 giây
+			setTimeout(function () {
+				alertElement.style.display = 'none'; // Ẩn thông báo
+			}, 5000);
+		});
+	</script>
+	<script>
+		// Lấy tham chiếu đến thẻ <p> theo id
+		var passwordError = document.getElementById('passwordError');
+
+		// Lắng nghe sự kiện khi người dùng nhập vào ô input mật khẩu
+		document.getElementById('password').addEventListener('input', function () {
+			// Kiểm tra nếu giá trị của ô input mật khẩu không rỗng
+			if (this.value.trim() !== '') {
+				// Ẩn thẻ <p> bằng cách đặt thuộc tính display: none
+				passwordError.style.display = 'none';
+			} else {
+				// Hiển thị thẻ <p> nếu ô input mật khẩu rỗng
+				passwordError.style.display = 'block';
+			}
+		});
+	</script>
+	<script>
+		// Lắng nghe sự kiện khi người dùng nhập vào ô input mật khẩu
+		document.getElementById('password').addEventListener('input', function () {
+			// Lấy giá trị mật khẩu
+			var password = this.value;
+
+			// Kiểm tra xem mật khẩu có chứa ký tự Unicode không
+			var hasUnicode = /[^\x00-\x7F]/.test(password);
+
+			// Nếu mật khẩu chứa ký tự Unicode, hiển thị thông báo lỗi
+			if (hasUnicode) {
+				document.getElementById('passwordUnicode').style.display = 'block';
+			} else {
+				document.getElementById('passwordUnicode').style.display = 'none';
+			}
+		});
+	</script>
+	<partial name="_ValidationScriptsPartial" />
+}
+

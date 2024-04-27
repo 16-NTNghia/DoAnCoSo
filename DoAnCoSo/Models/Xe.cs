@@ -30,7 +30,7 @@ namespace DoAnCoSo.Models
 		[Required(ErrorMessage = "Ẩn là bắt buộc.")]
 		public int Hide {  get; set; }
 
-		public ICollection<HinhAnhXe> hinhAnhXes { get; set; }
-		public ICollection<DatLichThueXe> datLichThueXes { get; set; }
+		public ICollection<HinhAnhXe>? hinhAnhXes { get; set; }
+		public ICollection<DatLichThueXe>? datLichThueXes { get; set; }
 	}
 }

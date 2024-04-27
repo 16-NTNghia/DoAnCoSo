@@ -11,8 +11,8 @@ namespace DoAnCoSo.Models
 		public string Name_ChucVu { get; set; }
 		[Required(ErrorMessage = "Ẩn là bắt buộc.")]
 		public int Hide { get; set; }
-		public ICollection<PhanQuyen> PhanQuyens { get; set; }
-		public ICollection<TaiKhoan> TaiKhoans { get; set; }
+		public ICollection<PhanQuyen>? PhanQuyens { get; set; }
+		public ICollection<TaiKhoan>? TaiKhoans { get; set; }
 
 	}
 }
