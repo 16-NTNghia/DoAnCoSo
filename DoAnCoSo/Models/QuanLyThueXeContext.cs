@@ -118,6 +118,13 @@ namespace DoAnCoSo.Models
 			{
 				entity.HasKey(x => x.BienSoXe);
 
+				entity.Property(x => x.GiaThue)
+					.HasColumnType("bigint");
+
+				entity.HasOne(x => x.email)
+					.WithMany(tk => tk.xes)
+					.HasForeignKey(x => x.Email);
+
 				entity.HasOne(x => x.diaDiems)
 					.WithMany(dd => dd.xes)
 					.HasForeignKey(x => x.ID_DiaDiem);

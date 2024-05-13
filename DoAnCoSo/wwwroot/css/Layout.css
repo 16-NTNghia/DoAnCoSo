@@ -14,6 +14,7 @@ header {
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-right: 20px;
 }
 
 .nav-item .nav-link {
@@ -45,3 +46,33 @@ footer {
     color: white;
 }
 
+.centered-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%; /* Đảm bảo hình ảnh được căn giữa theo chiều dọc */
+    max-height: 150px; /* Điều chỉnh kích thước tối đa của hình ảnh */
+}
+
+    .centered-image img {
+        max-width: 100%;
+        max-height: 100%;
+        border-radius: 16px; /* Bo tròn góc */
+        object-fit: cover; /* Đảm bảo hình ảnh phù hợp với kích thước của khung */
+    }
+
+.main-img {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+    .main-img img {
+        border-radius: 16px; /* Bo tròn góc */
+        object-fit: cover; /* Đảm bảo hình ảnh phù hợp với kích thước của khung */
+        max-height: 700px; /* Điều chỉnh kích thước tối đa của hình ảnh */
+    }
+
+.Info{
+    font-size: 45px;
+}

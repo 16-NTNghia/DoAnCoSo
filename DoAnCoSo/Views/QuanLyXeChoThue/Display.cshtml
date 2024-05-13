@@ -1,0 +1,263 @@
+﻿@{
+	ViewData["Title"] = "Display";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model DoAnCoSo.ViewModels.XeViewModel
+<div class="card" style="margin-bottom: 100px">
+	<div class="card-header" style="background-color: red; color: white;">
+		<h1>
+			<i class="bi bi-car-front-fill"> Xe mang biển số @Model.Xe.BienSoXe</i>
+		</h1>
+	</div>
+	<div class="card-body">
+		@if (TempData["ErrorMessage"] != null)
+		{
+			<div id="alertMessage" class="alert alert-danger" role="alert">
+				@TempData["ErrorMessage"]
+			</div>
+		}
+		@if (TempData["SuccessMessage"] != null)
+		{
+			<div id="alertMessage" class="alert alert-success">
+				@TempData["SuccessMessage"]
+			</div>
+		}
+		<div class="row">
+			<form class="form form-horizontal" asp-action="Display" asp-controller="QuanLyXeChoThue" method="POST" enctype="multipart/form-data">
+				<div class="form-group mb-3">
+					<div class="form-floating">
+						<input class="form-control" asp-for="Xe.BienSoXe"
+							   placeholder="Nhập biển số xe" required />
+					</div>
+				</div>
+
+				<div class="form-group mb-3">
+					<div class="form-floating">
+						<input class="form-control" asp-for="Xe.TenXe"
+							   placeholder="Nhập tên xe" required />
+						<label asp-for="Xe.TenXe">Tên xe</label>
+						<span asp-validation-for="Xe.TenXe" class="text-danger"></span>
+					</div>
+				</div>
+
+				<div class="form-group mb-3">
+					<label asp-for="Xe.AnhXe">Chọn ảnh xe:</label>
+					<div>
+						<!-- Thẻ img để hiển thị trước hình ảnh -->
+						<img id="previewImage" src="~/images/xe/@Model.Xe.BienSoXe/@Model.Xe.AnhXe" alt="Hình ảnh xe" style="max-height: 200px;" />
+						<!-- Input file để chọn ảnh -->
+						<input type="file" id="anhXe" name="HinhAnhXe" class="form-control-file" src="~/images/xe/@Model.Xe.BienSoXe/@Model.Xe.AnhXe" />
+						<span asp-validation-for="Xe.AnhXe" class="text-danger"></span>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label>Chọn những ảnh phụ của xe:</label>
+					<div id="otherPreviewContainer">
+						<!-- Các hình ảnh sẽ được hiển thị ở đây -->
+					</div>
+
+					<button type="button" onclick="addFileInput()">Thêm ảnh</button>
+				</div>
+
+
+				<div class="form-group mb-3">
+					<label asp-for="Xe.diaDiems">Địa điểm</label>
+					<select asp-for="Xe.ID_DiaDiem" class="form-control" asp-items="ViewBag.diaDiems"></select>
+				</div>
+
+				<div class="form-group mb-3">
+					<label asp-for="Xe.hangs">Hãng xe</label>
+					<select asp-for="Xe.ID_HangXe" class="form-control" asp-items="ViewBag.hangXes"></select>
+				</div>
+
+				<div class="form-group mb-3">
+					<label asp-for="Xe.loais">Loại xe</label>
+					<select asp-for="Xe.ID_Loai" class="form-control" asp-items="ViewBag.loaiXes"></select>
+				</div>
+
+				<div class="form-group mb-3">
+					<div class="form-floating">
+						<input class="form-control" asp-for="Xe.GiaThue"
+							   placeholder="Nhập giá thuê" required />
+						<label asp-for="Xe.GiaThue">Giá thuê</label>
+						<span asp-validation-for="Xe.GiaThue" class="text-danger"></span>
+					</div>
+				</div>
+
+				<div class="form-group mb-3">
+					<div class="row">
+						<label class="col-md-2" asp-for="Xe.TrangThai">Trạng thái:</label>
+						<div class="form-check col-md-2">
+							<input class="form-check-input" type="radio" asp-for="Xe.TrangThai" value="true" id="namRadio">
+							<label class="form-check-label" for="namRadio">Bận</label>
+						</div>
+						<div class="form-check col-md-2">
+							<input class="form-check-input" type="radio" asp-for="Xe.TrangThai" value="false" id="nuRadio">
+							<label class="form-check-label" for="nuRadio">Rảnh</label>
+						</div>
+					</div>
+					<span asp-validation-for="Xe.TrangThai" class="text-danger"></span>
+				</div>
+
+				<div class="form-group mb-3">
+					<div class="form-floating">
+						<input class="form-control" asp-for="Xe.MoTa"
+							   placeholder="Nhập mô tả" required />
+						<label asp-for="Xe.MoTa">Mô tả</label>
+						<span asp-validation-for="Xe.MoTa" class="text-danger"></span>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<div class="col-md-offset-3" style="text-align: center; justify-content: center">
+						<button type="submit" class="btn btn-danger"> Cập nhật</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+@section scripts {
+	<script>
+		// Lắng nghe sự kiện onchange khi người dùng chọn file
+		document.getElementById('anhXe').addEventListener('change', function (event) {
+			var input = event.target;
+			if (input.files && input.files[0]) {
+				var file = input.files[0];
+				var fileType = file.type;
+
+				// Kiểm tra phần mở rộng hoặc loại MIME của file
+				if (fileType.split('/')[0] !== 'image') {
+					alert('File không hợp lệ. Vui lòng chọn một file hình ảnh.');
+					input.value = ''; // Xóa giá trị của input để người dùng có thể chọn lại file khác
+					return;
+				}
+
+				var reader = new FileReader();
+
+				reader.onload = function (e) {
+					document.getElementById('previewImage').src = e.target.result;
+				}
+
+				reader.readAsDataURL(file);
+			}
+		});
+	</script>
+	@*  <script>
+        document.getElementById('otherFiles').addEventListener('change', function (event) {
+            var input = event.target;
+            var previewContainer = document.getElementById('otherPreviewContainer');
+            if (input.files && input.files.length > 0) {
+                for (var i = 0; i < input.files.length; i++) {
+                    var file = input.files[i];
+
+                    // Kiểm tra phần mở rộng của file
+                    if (!isValidImageFile(file)) {
+                        alert('File không hợp lệ. Vui lòng chọn một file hình ảnh.');
+                        input.value = ''; // Xóa giá trị của input để người dùng có thể chọn lại file khác
+                        return;
+                    }
+
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        var img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.style.maxHeight = '200px';
+                        img.style.marginRight = '10px'; // Thêm khoảng trắng giữa các ảnh
+                        previewContainer.appendChild(img);
+                    }
+                    reader.readAsDataURL(file);
+                }
+            }
+        });
+
+        // Hàm kiểm tra phần mở rộng của file
+        function isValidImageFile(file) {
+            return file.type.split('/')[0] === 'image';
+        }
+    </script> *@
+
+
+	<script> 
+		var selectedFiles = {}; // Biến lưu trữ tệp đã chọn
+		var inputList = [];// Mảng lưu trữ các thẻ input
+		function addFileInput() {
+			var previewContainer = document.getElementById('otherPreviewContainer');
+			// Tạo input mới
+			var input = document.createElement('input');
+			input.type = 'file';
+			input.name = 'otherFiles';
+			input.id = 'fileInput';
+			input.multiple = false; // Chỉ cho phép chọn một ảnh mỗi lần
+			input.classList.add('form-control-file');
+			input.style.display = 'none'; // Ẩn thẻ input mới tạo
+			input.addEventListener('change', function (event) {
+				selectedFile = event.target.files[0]; // Lưu tệp được chọn
+				handleFile(selectedFile); // Xử lý ảnh được chọn
+			});
+
+			// Thêm input mới vào mảng và container
+			inputList.push(input);
+			previewContainer.appendChild(input);
+
+			// Kiểm tra nếu đã vượt quá 3 input, xóa input cũ nhất
+			if (inputList.length > 3) {
+				var removedInput = inputList.shift();
+				previewContainer.removeChild(removedInput);
+			}
+
+			// Mở cửa sổ chọn tệp khi thêm input mới
+			input.click();
+		}
+
+		function handleFile(file) {
+			var previewContainer = document.getElementById('otherPreviewContainer');
+			if (!isValidImageFile(file)) {
+				alert('File không hợp lệ. Vui lòng chọn một file hình ảnh.');
+				return;
+			}
+
+			// Lấy tên file
+			var fileName = file.name;
+
+			// Xóa input cũ nếu tên file đã tồn tại
+			if (selectedFiles.hasOwnProperty(fileName)) {
+				// Lặp qua mảng inputList để tìm input có id tương ứng
+				for (var i = 0; i < inputList.length; i++) {
+					var inputId = 'fileInput' + i; // Tạo id dự kiến của input
+					var input = document.getElementById(inputId);
+					if (input && input.name === fileName) { // Kiểm tra id và tên file
+						previewContainer.removeChild(input); // Xóa input cũ
+						break; // Dừng vòng lặp sau khi xóa input
+					}
+				}
+			}
+
+			// Xóa ảnh cũ nếu tên file đã tồn tại
+			if (selectedFiles.hasOwnProperty(fileName)) {
+				selectedFiles[fileName].remove(); // Xóa hình ảnh cũ
+			}
+
+			// Tạo một đối tượng FileReader để đọc file ảnh
+			var reader = new FileReader();
+			reader.onload = function (e) {
+				// Tạo một thẻ img mới và thêm vào container
+				var img = document.createElement('img');
+				img.id = 'previewImg';
+				img.src = e.target.result;
+				img.style.maxHeight = '200px';
+				img.style.marginRight = '10px';
+				previewContainer.appendChild(img);
+
+				// Lưu thẻ img vào đối tượng selectedFiles
+				selectedFiles[fileName] = img;
+			};
+			reader.readAsDataURL(file);
+		}
+
+		function isValidImageFile(file) {
+			return file && file.type.split('/')[0] === 'image';
+		}
+	</script>
+}

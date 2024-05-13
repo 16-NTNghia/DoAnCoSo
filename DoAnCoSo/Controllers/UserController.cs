@@ -68,6 +68,11 @@ namespace DoAnCoSo.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Login(UserViewModel user)
 		{
+			List<SelectListItem> ChucVus = new List<SelectListItem>();
+			foreach (var item in _db.ChucVus.Where(dd => dd.Hide == 0))
+			{
+				ChucVus.Add(new SelectListItem { Value = item.ID_ChucVu.ToString(), Text = item.Name_ChucVu });
+			}
 			var viewModel = new UserViewModel
 			{
 				TaiKhoan = user.TaiKhoan,
@@ -80,8 +85,9 @@ namespace DoAnCoSo.Controllers
 					var claims = new List<Claim>
 					{
 						new Claim(ClaimTypes.Email, login.Email),
-						new Claim(ClaimTypes.Role, login.ID_ChucVu.ToString()),
+						new Claim(ClaimTypes.Role, login.ChucVu.Name_ChucVu),
 						new Claim(ClaimTypes.Name, login.Ten),
+						new Claim("ImageUrl", login.AnhDaiDien)
 					};
 					var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 					await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));

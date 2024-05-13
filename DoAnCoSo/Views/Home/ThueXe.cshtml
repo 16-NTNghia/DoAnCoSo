@@ -1,0 +1,105 @@
+﻿@{
+	ViewData["Title"] = "ThueXe";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model DoAnCoSo.ViewModels.HomeViewModel
+<!-- Modal -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-xl">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Hình ảnh chi tiết</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+					<div class="carousel-inner">
+						<!-- Các ảnh sẽ được thêm vào đây bằng JavaScript -->
+					</div>
+					<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+						<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+						<span class="visually-hidden">Previous</span>
+					</button>
+					<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+						<span class="carousel-control-next-icon" aria-hidden="true"></span>
+						<span class="visually-hidden">Next</span>
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Hiển thị ảnh chính -->
+<div class="main-img m-3 ">
+	<img id="mainImage" height="700px" style="border-radius: 16px; object-fit: cover" src="~/images/xe/@Model.xeThue.BienSoXe/@Model.xeThue.AnhXe" />
+</div>
+
+<!-- Hiển thị các ảnh phụ -->
+<div class="row sub-img m-3">
+	@if (Model.xeThue.hinhAnhXes != null && Model.xeThue.hinhAnhXes.Any())
+	{
+		@foreach (var item in Model.xeThue.hinhAnhXes.OrderByDescending(x => x.ID_HinhAnh).Take(3))
+		{
+			<div class="col-md-4 mb-3 centered-image">
+				@if (!string.IsNullOrEmpty(item?.URL_HinhAnh))
+				{
+					<img style="max-height: 150px" class="img-fluid" src="~/images/xe/@Model.xeThue.BienSoXe/@item.URL_HinhAnh" onclick="openModal('@Model.xeThue.BienSoXe', '@item.URL_HinhAnh')" />
+				}
+				else
+				{
+					<img style="max-height: 150px" class="img-fluid" src="~/images/xe/default.jpeg" onclick="openModal('@Model.xeThue.BienSoXe', 'default.jpeg')" />
+				}
+			</div>
+		}
+	}
+	else
+	{
+		// Hiển thị ảnh mặc định cho mỗi vòng lặp nếu không có ảnh trong cơ sở dữ liệu
+		@for (int i = 0; i < 3; i++)
+		{
+			<div class="col-md-4 mb-3 centered-image">
+				<img style="max-height: 150px" class="img-fluid" src="~/images/xe/default.jpeg" onclick="openModal('@Model.xeThue.BienSoXe', 'default.jpeg')" />
+			</div>
+		}
+	}
+</div>
+
+<div class="text-center">
+	<button type="button" class="btn btn-primary" onclick="openModal('@Model.xeThue.BienSoXe', '@Model.xeThue.AnhXe')">Xem ảnh chi tiết</button>
+</div>
+<div class="row mb-3">
+	<div class="col-md-9 Info">
+		<p><i class="bi bi-car-front"> Tên xe: </i>@Model.xeThue.TenXe</p>
+		<p><i class="bi bi-universal-access-circle"> Loại xe: </i>@Model.xeThue.loais.Name_LoaiXe</p>
+		<p><i class="bi bi-geo-alt"> Địa điểm xe: </i>@Model.xeThue.diaDiems.Name_DiaDiem</p>
+		<p><i class="bi bi-house-door-fill"> Hãng Xe: </i>@Model.xeThue.hangs.Name_HangXe</p>
+		<p><i class="bi bi-cash-stack"> Giá thuê xe 1 ngày: </i>@Model.xeThue.GiaThue VNĐ</p>
+		@if (Model.xeThue.TrangThai == true)
+		{
+			<p><i class="bi bi-check-circle-fill"> Trạng thái: </i>Bận</p>
+		}
+		else
+		{
+			<p><i class="bi bi-check-circle-fill"> Trạng thái: </i>Rảnh</p>
+
+		}
+		<p><i class="bi bi-chat-left"> Mô tả Xe: </i>@Model.xeThue.MoTa</p>
+	</div>
+</div>
+
+<!-- JavaScript -->
+<script>
+	function openModal(bienSoXe, imageUrl) {
+		var imagePath;
+		if (imageUrl === 'default.jpeg') {
+			imagePath = '/images/xe/default.jpeg';
+		} else {
+			imagePath = '/images/xe/' + bienSoXe + '/' + imageUrl;
+		}
+		// Tạo thẻ <img> để chứa ảnh và thêm vào carousel
+		var imageHtml = '<div class="carousel-item active"><img class="d-block w-100" src="' + imagePath + '" alt="..."></div>';
+		$('#carouselExampleIndicators .carousel-inner').html(imageHtml);
+		$('#imageModal').modal('show');
+	}
+</script>

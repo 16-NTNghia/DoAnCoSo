@@ -1,0 +1,52 @@
+﻿@{
+	ViewData["Title"] = "Index";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model DoAnCoSo.ViewModels.XeViewModel
+
+<div class="card" style="margin-bottom: 100px">
+	<div class="card-header" style="background-color: blue; color: white;">
+		<h1>
+			<i class="bi bi-car-front-fill"> Quản lý xe cho thuê</i>
+		</h1>
+	</div>
+	<div class="card-body">
+		@if (TempData["ErrorMessage"] != null)
+		{
+			<div id="alertMessage" class="alert alert-danger" role="alert">
+				@TempData["ErrorMessage"]
+			</div>
+		}
+		@if (TempData["SuccessMessage"] != null)
+		{
+			<div id="alertMessage" class="alert alert-success">
+				@TempData["SuccessMessage"]
+			</div>
+		}
+		<div>
+			<a class="btn btn-lg btn-outline-primary btn-info" style=" text-align: center; justify-content: center" asp-action="Create">Đăng Xe</a>
+		</div>
+		<div class="row">
+			@foreach (var item in Model.XeList)
+			{
+				<div class="col-md-3 mb-5 mt-5">
+					<div class="card">
+						<div class="card-header card-header-tabs">
+							<div class="card-body" style="text-align: center">
+								<img style="max-height: 150px" src="~/images/xe/@item.BienSoXe/@item.AnhXe" />
+								<div class="caption">
+									<h4>@item.TenXe</h4>
+									<p>Giá: @item.GiaThue VNĐ</p>
+									<p>
+										<a asp-action="Display" asp-controller="QuanLyXeChoThue" asp-route-BienSoXe="@item.BienSoXe" class="btn btn-info" role="button"><i class="bi bi-three-dots"></i> Chi tiết</a>
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			}
+		</div>
+	</div>
+</div>
+

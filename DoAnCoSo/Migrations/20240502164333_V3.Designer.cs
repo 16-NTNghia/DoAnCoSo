@@ -4,6 +4,7 @@ using DoAnCoSo.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DoAnCoSo.Migrations
 {
     [DbContext(typeof(QuanLyThueXeContext))]
-    partial class QuanLyThueXeContextModelSnapshot : ModelSnapshot
+    [Migration("20240502164333_V3")]
+    partial class V3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -296,8 +299,8 @@ namespace DoAnCoSo.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<long>("GiaThue")
-                        .HasColumnType("bigint");
+                    b.Property<decimal>("GiaThue")
+                        .HasColumnType("decimal(20,0)");
 
                     b.Property<int>("Hide")
                         .HasColumnType("int");
